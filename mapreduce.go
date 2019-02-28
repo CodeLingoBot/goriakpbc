@@ -28,7 +28,7 @@ func (mr *MapReduce) Add(bucket string, key string) (err error) {
 	return
 }
 
-// Add a whole bucket as input. Note that this ONLY works on buckets that have secondary indexes (2i) enabled since
+// AddBucket adds a whole bucket as input. Note that this ONLY works on buckets that have secondary indexes (2i) enabled since
 // listing keys on a bucket without using indexes is dangerous on production clusters.
 func (mr *MapReduce) AddBucket(bucket string) (err error) {
 	if len(mr.inputs) > 0 || mr.index != "" {
@@ -38,7 +38,7 @@ func (mr *MapReduce) AddBucket(bucket string) (err error) {
 	return
 }
 
-// Add a range of keys from one bucket using secondary indexes.
+// AddBucketRange adds a range of keys from one bucket using secondary indexes.
 func (mr *MapReduce) AddBucketRange(bucket string, start string, end string) (err error) {
 	if len(mr.inputs) > 0 || mr.index != "" {
 		return BadMapReduceInputs
@@ -47,7 +47,7 @@ func (mr *MapReduce) AddBucketRange(bucket string, start string, end string) (er
 	return
 }
 
-// Add a keys using a secondary index.
+// AddIndex adds a keys using a secondary index.
 func (mr *MapReduce) AddIndex(bucket string, index string, key string) (err error) {
 	if len(mr.inputs) > 0 || mr.index != "" {
 		return BadMapReduceInputs
@@ -56,7 +56,7 @@ func (mr *MapReduce) AddIndex(bucket string, index string, key string) (err erro
 	return
 }
 
-// Add a range of keys using a secondary index.
+// AddIndexRange adds a range of keys using a secondary index.
 func (mr *MapReduce) AddIndexRange(bucket string, index string, start string, end string) (err error) {
 	if len(mr.inputs) > 0 || mr.index != "" {
 		return BadMapReduceInputs

@@ -66,6 +66,8 @@ var (
 /*
 Return is an error is really a warning, e.g. a common json error, or
 ModelDoesNotMatch.
+*/IsWarning returns is an error is really a warning, e.g. a common json error, or
+ModelDoesNotMatch.
 */
 func IsWarning(err error) bool {
 	if err != nil {
@@ -275,6 +277,17 @@ Using the "Device" struct as an example:
 
 dev := &Device{}
 err := client.Load("devices", "12345", dev)
+*/function retrieves the data from Riak and stores it in the struct
+that is passed as destination. It stores some necessary information in the
+riak.Model field so it can be used later in other (Save) operations.
+
+If the bucketname is empty ("") it'll be the default bucket, based on the
+riak.Model tag.
+
+Using the "Device" struct as an example:
+
+dev := &Device{}
+err := client.Load("devices", "12345", dev)
 */
 func (c *Client) LoadModelFrom(bucketname string, key string, dest Resolver, options ...map[string]uint32) (err error) {
 	// Check destination
@@ -337,6 +350,11 @@ func (c *Client) LoadModel(key string, dest Resolver, options ...map[string]uint
 
 /*
 Create a new Document Model, passing in the bucketname and key. The key can be
+empty in which case Riak will pick a key. The destination must be a pointer to
+a struct that has the riak.Model field.
+If the bucketname is empty the default bucketname, based on the riak.Model tag
+will be used.
+*/Create a new Document Model, passing in the bucketname and key. The key can be
 empty in which case Riak will pick a key. The destination must be a pointer to
 a struct that has the riak.Model field.
 If the bucketname is empty the default bucketname, based on the riak.Model tag
@@ -560,7 +578,7 @@ func (m *Model) Reload() (err error) {
 	return
 }
 
-// Return crc32 of the underlying robject data for easy comparison to other models
+// CRC32 returns crc32 of the underlying robject data for easy comparison to other models
 func (m *Model) CRC32() uint32 {
 	if m.robject == nil {
 		return 0
@@ -568,13 +586,13 @@ func (m *Model) CRC32() uint32 {
 	return crc32.ChecksumIEEE(m.robject.Data)
 }
 
-// Return the object Vclock - this allows an application to detect whether Reload()
+// Vclock returns the object Vclock - this allows an application to detect whether Reload()
 // loaded a newer version of the object
 func (m *Model) Vclock() (vclock []byte) {
 	return m.robject.Vclock
 }
 
-// Return the object's indexes.  This allows an application to set custom secondary
+// Indexes returns the object's indexes.  This allows an application to set custom secondary
 // indexes on the object for later querying.
 func (m *Model) Indexes() map[string][]string {
 	if m.robject.Indexes == nil {
@@ -583,7 +601,7 @@ func (m *Model) Indexes() map[string][]string {
 	return m.robject.Indexes
 }
 
-// Get a models Key, e.g. needed when Riak has picked it
+// Key gets a models Key, e.g. needed when Riak has picked it
 func (c *Client) Key(dest interface{}) (key string, err error) {
 	// Check destination
 	_, _, rm, _, err := check_dest(dest)
@@ -603,7 +621,7 @@ func (c *Client) Key(dest interface{}) (key string, err error) {
 	return model.robject.Key, nil
 }
 
-// Get a models Key, e.g. needed when Riak has picked it
+// Key gets a models Key, e.g. needed when Riak has picked it
 func (m Model) Key() (key string) {
 	if m.robject == nil {
 		return ""
@@ -687,7 +705,7 @@ func (m *Many) Add(dest Resolver) (err error) {
 	return err
 }
 
-// Add a given Link (One) directly
+// AddLink adds a given Link (One) directly
 func (m *Many) AddLink(o One) {
 	*m = append(*m, o)
 }
@@ -711,7 +729,7 @@ func (m *Many) Remove(dest Resolver) (err error) {
 	return NotFound
 }
 
-// Remove a given Link (One) directly, e.g. so it can be used when iterating over a riak.Many slice
+// RemoveLink removes a given Link (One) directly, e.g. so it can be used when iterating over a riak.Many slice
 func (m *Many) RemoveLink(o One) (err error) {
 	for i, v := range *m {
 		if v.link.Bucket == o.link.Bucket && v.link.Key == o.link.Key {
@@ -723,12 +741,12 @@ func (m *Many) RemoveLink(o One) (err error) {
 	return NotFound
 }
 
-// Return the number of Links
+// Len returns the number of Links
 func (m *Many) Len() int {
 	return len(*m)
 }
 
-// Return if a given Link is in the riak.Many slice
+// Contains returns if a given Link is in the riak.Many slice
 func (m *Many) Contains(o One) bool {
 	for _, v := range *m {
 		if v.Equal(o) {
@@ -763,7 +781,7 @@ func LoadModel(key string, dest Resolver, options ...map[string]uint32) (err err
 	return defaultClient.LoadModel(key, dest, options...)
 }
 
-// The LoadModelFrom function retrieves the data from Riak using the default client and stores it in the struct
+// function retrieves the data from Riak using the default client and stores it in the struct
 // that is passed as destination.
 func LoadModelFrom(bucketname string, key string, dest Resolver, options ...map[string]uint32) (err error) {
 	if defaultClient == nil {

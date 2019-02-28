@@ -47,7 +47,7 @@ func Ping() (err error) {
 	return defaultClient.Ping()
 }
 
-// Get the client Id
+// Id gets the client Id
 func Id() (id string, err error) {
 	if defaultClient == nil {
 		err = NoDefaultClientConnection
@@ -64,7 +64,7 @@ func SetId(id string) (err error) {
 	return defaultClient.SetId(id)
 }
 
-// Get the server version for the default client
+// ServerVersion gets the server version for the default client
 func ServerVersion() (node string, version string, err error) {
 	if defaultClient == nil {
 		err = NoDefaultClientConnection
@@ -73,7 +73,7 @@ func ServerVersion() (node string, version string, err error) {
 	return defaultClient.ServerVersion()
 }
 
-// Return a new bucket using the client connection
+// NewBucket returns a new bucket using the client connection
 func NewBucket(name string) (*Bucket, error) {
 	if defaultClient == nil {
 		return nil, NoDefaultClientConnection
@@ -81,7 +81,7 @@ func NewBucket(name string) (*Bucket, error) {
 	return defaultClient.NewBucket(name)
 }
 
-// Return a new bucket using the client connection
+// NewBucketType returns a new bucket using the client connection
 func NewBucketType(btype, name string) (*Bucket, error) {
 	if defaultClient == nil {
 		return nil, NoDefaultClientConnection
@@ -106,7 +106,7 @@ func RunMapReduce(query string) (resp [][]byte, err error) {
 	return defaultClient.RunMapReduce(query)
 }
 
-// Get directly from a bucket, without creating a bucket first
+// GetFrom gets directly from a bucket, without creating a bucket first
 func GetFrom(bucketname string, key string, options ...map[string]uint32) (obj *RObject, err error) {
 	if defaultClient == nil {
 		err = NoDefaultClientConnection

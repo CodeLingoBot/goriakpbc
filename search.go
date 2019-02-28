@@ -90,7 +90,7 @@ func (c *Client) NewSchema(name string, content string) (*Schema, error) {
 	return &Schema{Name: name, Content: content, c: *c}, nil
 }
 
-// StoreSchema validate schema and sends it to Riak
+// Store validate schema and sends it to Riak
 func (s *Schema) Store() error {
 	if s.Name == "" {
 		return errors.New("No schema name specified")

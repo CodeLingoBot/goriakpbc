@@ -18,7 +18,7 @@ type Bucket struct {
 	consistent    bool
 }
 
-// Return a new bucket object
+// NewBucket returns a new bucket object
 func (c *Client) NewBucket(name string) (*Bucket, error) {
 	if name == "" {
 		return nil, NoBucketName
@@ -86,32 +86,32 @@ func (c *Client) NewBucketType(btype, name string) (*Bucket, error) {
 	return bucket, nil
 }
 
-// Return a new bucket object. DEPRECATED, use NewBucket instead.
+// Bucket returns a new bucket object. DEPRECATED, use NewBucket instead.
 func (c *Client) Bucket(name string) (*Bucket, error) {
 	return c.NewBucket(name)
 }
 
-// Return the bucket name
+// Name returns the bucket name
 func (b *Bucket) Name() string {
 	return b.name
 }
 
-// Return the nval property of a bucket
+// NVal returns the nval property of a bucket
 func (b *Bucket) NVal() uint32 {
 	return b.nval
 }
 
-// Return the allowMult property of a bucket
+// AllowMult returns the allowMult property of a bucket
 func (b *Bucket) AllowMult() bool {
 	return b.allowMult
 }
 
-// Return the lastWriteWins property of a bucket
+// LastWriteWins returns the lastWriteWins property of a bucket
 func (b *Bucket) LastWriteWins() bool {
 	return b.lastWriteWins
 }
 
-// Return the search property of a bucket
+// Search returns the search property of a bucket
 func (b *Bucket) Search() bool {
 	return b.search
 }
@@ -148,7 +148,7 @@ func (b *Bucket) SetSearchIndex(searchIndex string) (err error) {
 	return nil
 }
 
-// Return the search_index property of a bucket
+// SearchIndex returns the search_index property of a bucket
 func (b *Bucket) SearchIndex() string {
 	return b.searchIndex
 }
@@ -309,7 +309,7 @@ func (c *Client) ExistsIn(bucketname string, key string, options ...map[string]u
 	return bucket.Exists(key, options...)
 }
 
-// Return a list of keys using the index for a single key
+// IndexQuery returns a list of keys using the index for a single key
 func (b *Bucket) IndexQuery(index string, key string) (keys []string, err error) {
 	req := &pb.RpbIndexReq{Bucket: []byte(b.name), Type: []byte(b.bucket_type), Index: []byte(index),
 		Qtype: pb.RpbIndexReq_eq.Enum(), Key: []byte(key)}
@@ -329,7 +329,7 @@ func (b *Bucket) IndexQuery(index string, key string) (keys []string, err error)
 	return
 }
 
-// Return a page of keys using the index for a single key
+// IndexQueryPage returns a page of keys using the index for a single key
 func (b *Bucket) IndexQueryPage(index string, key string, results uint32, continuation string) (keys []string, next string, err error) {
 	req := &pb.RpbIndexReq{Bucket: []byte(b.name), Type: []byte(b.bucket_type), Index: []byte(index),
 		Qtype: pb.RpbIndexReq_eq.Enum(), Key: []byte(key),
@@ -357,7 +357,7 @@ func (b *Bucket) IndexQueryPage(index string, key string, results uint32, contin
 	return
 }
 
-// Return a list of keys using the index range query
+// IndexQueryRange returns a list of keys using the index range query
 func (b *Bucket) IndexQueryRange(index string, min string, max string) (keys []string, err error) {
 	req := &pb.RpbIndexReq{Bucket: []byte(b.name), Type: []byte(b.bucket_type), Index: []byte(index),
 		Qtype:    pb.RpbIndexReq_range.Enum(),
@@ -378,7 +378,7 @@ func (b *Bucket) IndexQueryRange(index string, min string, max string) (keys []s
 	return
 }
 
-// Return a page of keys using the index range query
+// IndexQueryRangePage returns a page of keys using the index range query
 func (b *Bucket) IndexQueryRangePage(index string, min string, max string, results uint32, continuation string) (keys []string, next string, err error) {
 	req := &pb.RpbIndexReq{Bucket: []byte(b.name), Type: []byte(b.bucket_type), Index: []byte(index),
 		Qtype:    pb.RpbIndexReq_range.Enum(),

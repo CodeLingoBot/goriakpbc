@@ -152,7 +152,7 @@ func (c *Counter) Destroy() (err error) {
 	return nil
 }
 
-// Get a counter
+// GetCounter gets a counter
 func (b *Bucket) GetCounter(key string, options ...map[string]uint32) (c *Counter, err error) {
 	c = &Counter{
 		Bucket:  b,
@@ -175,7 +175,7 @@ func (b *Bucket) GetCounterWithoutLoad(key string, options ...map[string]uint32)
 	return
 }
 
-// Get counter directly from a bucket, without creating a bucket first
+// GetCounterFrom gets counter directly from a bucket, without creating a bucket first
 func (c *Client) GetCounterFrom(bucketname string, key string, options ...map[string]uint32) (counter *Counter, err error) {
 	var bucket *Bucket
 	bucket, err = c.Bucket(bucketname)

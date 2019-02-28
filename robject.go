@@ -159,7 +159,7 @@ func (obj *RObject) Destroy() (err error) {
 	return nil
 }
 
-// Returns true if the object was fetched with multiple siblings (AllowMult=true on the bucket)
+// Conflict returns true if the object was fetched with multiple siblings (AllowMult=true on the bucket)
 func (obj *RObject) Conflict() bool {
 	return obj.conflict
 }
@@ -221,14 +221,14 @@ func (obj *RObject) setContent(resp *pb.RpbGetResp) {
 	}
 }
 
-// Add a link to another object (does not store the object, must explicitly call "Store()")
+// LinkTo adds a link to another object (does not store the object, must explicitly call "Store()")
 func (obj *RObject) LinkTo(target *RObject, tag string) {
 	if target.Bucket.name != "" && target.Key != "" {
 		obj.Links = append(obj.Links, Link{target.Bucket.name, target.Key, tag})
 	}
 }
 
-// Add a link if it is not already in the Links slics, returns false if already present
+// AddLink adds a link if it is not already in the Links slics, returns false if already present
 func (obj *RObject) AddLink(link Link) bool {
 	for _, el := range obj.Links {
 		if el.Bucket == link.Bucket && el.Key == link.Key && el.Tag == link.Tag {
@@ -281,7 +281,7 @@ func (b *Bucket) Get(key string, options ...map[string]uint32) (obj *RObject, er
 	return obj, nil
 }
 
-// Get directly from a bucket, without creating a bucket first
+// GetFrom gets directly from a bucket, without creating a bucket first
 func (c *Client) GetFrom(bucketname string, key string, options ...map[string]uint32) (obj *RObject, err error) {
 	var bucket *Bucket
 	bucket, err = c.Bucket(bucketname)

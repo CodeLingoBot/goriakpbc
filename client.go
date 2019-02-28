@@ -70,17 +70,17 @@ var (
 	ChanWaitTimeout        = errors.New("Waiting for an available connection timed out")
 )
 
-// Returns a new Client connection
+// NewClient returns a new Client connection
 func NewClient(addr string) *Client {
 	return NewClientPool(addr, 1)
 }
 
-// Returns a new Client connection. DEPRECATED, use NewClient instead
+// New returns a new Client connection. DEPRECATED, use NewClient instead
 func New(addr string) *Client {
 	return NewClient(addr)
 }
 
-// Returns a new Client with multiple connections to Riak
+// NewClientPool returns a new Client with multiple connections to Riak
 func NewClientPool(addr string, count int) *Client {
 	okCountSize := count
 	if count < 1 {
@@ -91,7 +91,7 @@ func NewClientPool(addr string, count int) *Client {
 	return ret
 }
 
-// Returns a new Client with multiple connections to Riak. DEPRECATED, use NewClientPool instead
+// NewPool returns a new Client with multiple connections to Riak. DEPRECATED, use NewClientPool instead
 func NewPool(addr string, count int) *Client {
 	return NewClientPool(addr, count)
 }
@@ -444,7 +444,7 @@ func (c *Client) Ping() (err error) {
 	return err
 }
 
-// Get the client Id
+// Id gets the client Id
 func (c *Client) Id() (id string, err error) {
 	// Use hardcoded request, no need to serialize
 	msg := []byte{0, 0, 0, 1, rpbGetClientIdReq}
@@ -472,7 +472,7 @@ func (c *Client) SetId(id string) (err error) {
 	return err
 }
 
-// Get the server version
+// ServerVersion gets the server version
 func (c *Client) ServerVersion() (node string, version string, err error) {
 	msg := []byte{0, 0, 0, 1, rpbGetServerInfoReq}
 	err, conn := c.getConn()
